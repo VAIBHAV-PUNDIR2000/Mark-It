@@ -41,8 +41,13 @@ const MyKart = ({ setIsCheckoutDone }) => {
     return sum;
   };
   const userContext = useContext(Context);
-  const { cartItems, setCartItems, itemQuantityList, setItemQuantityList } =
-    userContext;
+  const {
+    cartItems,
+    setCartItems,
+    itemQuantityList,
+    setItemQuantityList,
+    userData,
+  } = userContext;
   const navigateTo = useNavigate();
   const [show, setShow] = useState(false);
   const [modalOb, setModalOb] = useState({});
@@ -75,6 +80,7 @@ const MyKart = ({ setIsCheckoutDone }) => {
           })
         : ""
     );
+
     const ar = itemQuantityList.filter((i) => i.id !== item.id);
     setItemQuantityList([...ar, obj]);
 
@@ -100,6 +106,7 @@ const MyKart = ({ setIsCheckoutDone }) => {
     const ar = itemQuantityList.filter((i) => i.id !== item.id);
     setItemQuantityList([...ar, obj]);
   };
+  console.log(userData.items);
   return (
     <div
       style={{
@@ -304,6 +311,7 @@ const MyKart = ({ setIsCheckoutDone }) => {
             </Card>
           </Col>
         </Row>
+        <li></li>
       </Container>
     </div>
   );

@@ -22,7 +22,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //Header
 import Header from "./components/Header";
 import UserSettingsPage from "./Pages/UserSettingsPage";
-import { Spinner } from "reactstrap";
 
 //app
 const App = () => {
@@ -47,40 +46,27 @@ const App = () => {
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         setUid(toString(user.uid));
-        console.log("here in observe", user.uid);
         fetchCreds(user.uid);
         SetIsUserlogged(true);
         setUser(user);
       } else {
-        console.log("haha got you");
         SetIsUserlogged(false);
       }
     });
   //funtion to fetch the database details from server
 
   const fetchCreds = (uid) => {
-    console.log("here", uid);
     const userRef = database.ref("user/" + uid);
     // console.log(userRef);
     userRef.on("value", (snapshot) => setUserData(snapshot.val()));
-
-    console.log(userData);
   };
   //useEffect -  to observe the authentication is done alreadty or not
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-    console.log("its happening");
-    setLoadingProgress(100);
-    observe();
-    GetObject();
-  }, []);
 
   const Clothingurl = "http://myjson.dit.upm.es/api/bins/gywj";
   const GetObject = async () => {
     const data = await axios.get(Clothingurl);
     const dataPhotos = data.data.photos;
+
     // console.log("here", dataPhotos);
 
     const photoData = dataPhotos.map((singlePhoto) => ({
@@ -98,6 +84,15 @@ const App = () => {
   };
 
   // console.log("is ", isCheckoutDone);
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 2000);
+    console.log("its happening");
+    setLoadingProgress(100);
+    observe();
+
+    GetObject();
+  }, []);
   return (
     <Context.Provider
       value={{

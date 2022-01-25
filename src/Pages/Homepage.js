@@ -24,10 +24,18 @@ import axios from "axios";
 
 import Context from "../Context/Context";
 import { Card, CardImg } from "reactstrap";
+import { firebaseAuth, database } from "../utils/FirebaseConfig";
 
 const Homepage = () => {
   const userContext = useContext(Context);
-  const { photos } = userContext;
+  const { photos, userData, setUserData } = userContext;
+
+  const firebasesetup = () => {
+    const userRef = database.ref("user/" + firebaseAuth.currentUser.uid).set({
+      ...userData,
+      items: [...userContext.cartItems],
+    });
+  };
 
   const setItemToCart = (item) => {
     var itemAlreadyAdded = false;
@@ -46,12 +54,14 @@ const Homepage = () => {
         },
       ]);
       userContext.setCartItems([...userContext.cartItems, item]);
+      firebasesetup();
 
       console.log("Adding new item because array is zero");
     }
     if (itemAlreadyAdded) console.log("item already included");
     else {
       userContext.setCartItems([...userContext.cartItems, item]);
+      firebasesetup();
       userContext.setItemQuantityList([
         ...userContext.itemQuantityList,
         {
